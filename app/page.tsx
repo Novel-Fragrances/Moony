@@ -74,13 +74,13 @@ export default function Home() {
     setIsPlaying(true);
   };
 
-  const handleVolumeChange = (e) => {
+const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     setVolume(val);
     if (audio) audio.volume = val;
   };
 
-  const handleSeek = (e) => {
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = Number(e.target.value);
     if (audio) audio.currentTime = val;
     setCurrentTime(val);
@@ -101,7 +101,7 @@ export default function Home() {
 
   const openNote = () => setShowNote(true);
 
-  const formatTime = (sec) => {
+  const formatTime = (sec:number) => {
     const m = Math.floor(sec / 60);
     const s = Math.floor(sec % 60)
       .toString()
