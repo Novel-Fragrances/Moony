@@ -39,7 +39,7 @@ const handleUserInteraction = () => {
   if (!hasInteracted) {
     setHasInteracted(true);
     if (audio) {
-      audio.currentTime = 570; // ضبط البداية على الدقيقة 9
+      audio.currentTime = 360; // ضبط البداية على الدقيقة 9
       audio.play().catch(() => console.log("Autoplay blocked"));
       setIsPlaying(true);
     }
