@@ -33,24 +33,40 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  useEffect(() => {
-    if (!audio) return;
-    audio.loop = false;
-    audio.volume = volume;
+  const [hasInteracted, setHasInteracted] = useState(false);
 
-    const setAudioDuration = () => setDuration(audio.duration || 0);
-    audio.addEventListener("loadedmetadata", setAudioDuration);
+const handleUserInteraction = () => {
+  if (!hasInteracted) {
+    setHasInteracted(true);
+    if (audio) {
+      audio.currentTime = 570; // ضبط البداية على الدقيقة 9
+      audio.play().catch(() => console.log("Autoplay blocked"));
+      setIsPlaying(true);
+    }
+  }
+};
 
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    audio.addEventListener("timeupdate", updateTime);
+useEffect(() => {
+  if (!audio) return;
+  audio.loop = false;
+  audio.volume = volume;
 
-    return () => {
-      audio.removeEventListener("loadedmetadata", setAudioDuration);
-      audio.removeEventListener("timeupdate", updateTime);
-    };
-  }, [audio, volume]);
+  const setAudioDuration = () => setDuration(audio.duration || 0);
+  audio.addEventListener("loadedmetadata", setAudioDuration);
+
+  const updateTime = () => setCurrentTime(audio.currentTime);
+  audio.addEventListener("timeupdate", updateTime);
+
+  return () => {
+    audio.removeEventListener("loadedmetadata", setAudioDuration);
+    audio.removeEventListener("timeupdate", updateTime);
+  };
+}, [audio, volume]);
+
+
 
   const handleBoxClick = (index: number) => {
+      handleUserInteraction(); // تسجيل التفاعل
     if (activeBox === index) setActiveBox(null);
     else setActiveBox(index);
 
@@ -61,6 +77,7 @@ export default function Home() {
   };
 
   const toggleAudio = () => {
+      handleUserInteraction(); // تسجيل التفاعل
     if (!audio) return;
     if (isPlaying) audio.pause();
     else audio.play();
